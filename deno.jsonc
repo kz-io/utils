@@ -1,0 +1,70 @@
+{
+  "name": "@kz/mod-name",
+  "version": "0.0.1",
+  // If only exporting the mod.ts, update the object to "./mod.ts" and update the docs task to include only the mod.ts file
+  "exports": {
+    ".": "./mod.ts",
+    "./decorators": "./src/decorators/mod.ts",
+    "./exceptions": "./src/exceptions/mod.ts",
+    "./types": "./src/types/mod.ts",
+    "./utils": "./src/utils/mod.ts"
+  },
+  "lint": {
+    "rules": {
+      "tags": [
+        "recommended"
+      ],
+      "include": [
+        "ban-untagged-todo",
+        "camelcase",
+        "default-param-last",
+        "eqeqeq",
+        "explicit-function-return-type",
+        "no-throw-literal"
+      ]
+    }
+  },
+  "fmt": {
+    "indentWidth": 2,
+    "lineWidth": 80,
+    "proseWrap": "preserve",
+    "useTabs": false,
+    "singleQuote": true,
+    "semiColons": true
+  },
+  "tasks": {
+    "fmt": "deno fmt && deno fmt --check",
+    "lint": "deno lint",
+    "test": "deno test --allow-all --coverage --doc --trace-leaks",
+    "cov": "deno task test && deno task cov:gen && deno task cov:report",
+    "cov:gen": "deno coverage coverage --lcov --output=cov.lcov",
+    "cov:report": "deno coverage --html coverage",
+    "docs": "deno doc --html --name=@kz/mod-name ./src/decorators.ts ./src/exceptions/mod.ts ./src/types/mod.ts ./src/utils/mod.ts ./mod.ts",
+    "jsr:check": "deno publish --dry-run --allow-dirty",
+    "pre-commit": "deno task cov && deno task docs && deno task jsr:check && deno task lint && deno task fmt"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^0.221.0",
+    "@std/testing": "jsr:@std/testing@^0.221.0"
+  },
+  "exclude": [
+    ".git",
+    "cov",
+    "coverage",
+    "testdata",
+    "docs"
+  ],
+  "publish": {
+    "include": [
+      "README.md",
+      "LICENSE",
+      "**/*.ts",
+      "deno.jsonc",
+      "deno.lock",
+      "**/*.json"
+    ],
+    "exclude": [
+      "**/*.test.ts"
+    ]
+  }
+}
